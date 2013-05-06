@@ -1,31 +1,25 @@
 module Service
-  class Segment
+  class Segment < Service::Base
     
     TABLE_NAME = 'entity'
-    
+    PREFIX = 'SG'
+
     def initialize
-      @data_access = DataAccess::AWS::SimpleDB.new
+      @table_name = TABLE_NAME
+      @prefix = PREFIX
+      super
     end
     
-    def add_segment(name, auth_profile)
-      attributes = {
-        :name => name,
-        :auth_profile => auth_profile
-      }
-      @data_access.put_row(TABLE_NAME, attributes, 'SG')
+    # Create a new segment in data store
+    #
+    # @param [Model::Segment] Segment data to create
+    def create(segment)      
+      super(segment)
     end
     
-    def retrieve_segment(segment_id)
+    def retrieve(segment_id)
       # get from cache
-      data = $cache[:entity].get(segment_id) {
-        hashData = @data_access.get_row(TABLE_NAME, segment_id)
-        if hashData == nil
-           nil
-        else 
-          { :name => hashData['name'], :auth_profile => hashData['auth_profile']}          
-        end
-      }      
-      return data      
+      super(segment_id, 'Model::Segment')     
     end
     
   end

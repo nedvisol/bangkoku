@@ -10,18 +10,27 @@ module Cache
     #
     # @param [String] key Cache key
     def get(key)
-      value = @backend.get(key)
-      if value == nil
+      cached_value = @backend.get(key)
+      if cached_value == nil
         value = yield(key)
-        @backend.set(key, value)
+        @backend.set(key, serialize(value))
+      else        
+        value = deserialize(cached_value)
       end
       return value
     end
     
     def set(key, value)
-      @backend.set(key, value)
+      @backend.set(key, serialize(value))
     end
     
+    private 
+    def serialize(obj)      
+      Marshal.dump(obj)      
+    end
+    def deserialize(bin)      
+      Marshal.load(bin)
+    end
     
   end
 end
