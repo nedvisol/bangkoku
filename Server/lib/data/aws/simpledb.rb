@@ -14,10 +14,11 @@ module DataAccess
       # @param [Hash] attributes Initial attributes to be added
       # @param [String] id Optional.
 
-      def put_row (table, attributes, id_prefix = '', id = nil)
-        item_name = (id==nil)? Util.get_uuid(id_prefix) : id
+      def put_row (table, attributes, model_type = '', id = nil)
+        item_name = (id==nil)? Util.get_uuid : id
         ts = "%10.8f" % Time.now.to_f
         attributes['id'] = item_name
+        attributes['model_type'] = model_type
         attributes['timestamp'] = ts
                     
         @simpledb.domains[table].items[item_name].attributes.put(

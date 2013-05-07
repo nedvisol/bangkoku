@@ -2,11 +2,11 @@ module Service
   class Segment < Service::Base
     
     TABLE_NAME = 'entity'
-    PREFIX = 'SG'
+    MODEL_TYPE = 'SG'
 
     def initialize
       @table_name = TABLE_NAME
-      @prefix = PREFIX
+      @model_type = MODEL_TYPE
       super
     end
     

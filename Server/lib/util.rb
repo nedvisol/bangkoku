@@ -2,8 +2,8 @@ require 'json'
 
 module Util
   UTIL_LARGE_NUM = 1 << 63 
-  def Util.get_uuid(prefix)
-    return "#{prefix}-#{SecureRandom.random_number(UTIL_LARGE_NUM).to_s(32)}"
+  def Util.get_uuid
+    return SecureRandom.random_number(UTIL_LARGE_NUM).to_s(32)
   end
   
   def Util.restful_json_wrapper

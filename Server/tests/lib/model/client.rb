@@ -13,7 +13,7 @@ class Client < Test::Unit::TestCase
 
   def test_create_fail_no_segment
     assert_raise ::RuntimeError do
-      client = Model::Client.create('foo')
+      client = Model::Client.new('foo')
     end
   end
 

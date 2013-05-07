@@ -14,7 +14,7 @@ module Cache
       if cached_value == nil
         value = yield(key)
         @backend.set(key, serialize(value))
-      else        
+      else                
         value = deserialize(cached_value)
       end
       return value
@@ -25,7 +25,7 @@ module Cache
     end
     
     private 
-    def serialize(obj)      
+    def serialize(obj)    
       Marshal.dump(obj)      
     end
     def deserialize(bin)      
