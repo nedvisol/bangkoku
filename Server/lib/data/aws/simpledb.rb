@@ -52,12 +52,14 @@ module DataAccess
       # @param [Hash] attributes Hashtable of the attributes to be updated {key => value, ...}
       # @param [Hash] options Hashtable for options. Use :if and :value to check and only update if value exists; 
       #                     use :unless to check and only update if an attribute does not exist 
-      #                     {:if => <key name>, :value =>  <expected value> } 
+      #                     {:if => {expected key => expected value} } 
       #                     {:unless => <key name> }
       def update_row(table, key, attributes, options = nil)
         options = (options == nil)? {} : options
         options[:replace] = attributes  
-        @simpledb.domains[table].items[item_name].attributes.put(
+        options[:if] =  { 'id' => key }
+        
+        @simpledb.domains[table].items[key].attributes.put(
         options        
         )        
       end

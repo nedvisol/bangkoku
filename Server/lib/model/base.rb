@@ -1,6 +1,6 @@
 module Model
   module Base
-    attr_reader :id, :timestamp
+    attr_reader :id, :timestamp, :data_columns
     
     # Initialize with attribute keys map
     #
@@ -14,6 +14,7 @@ module Model
       attribute_map.each{|instance_prop, attribute_key|
         instance_variable_set(instance_prop, hash_data[attribute_key])
       }
+      @data_columns = hash_data.keys
     end
     
     def set_id!(id)
@@ -22,6 +23,10 @@ module Model
     
     def create(service)
       service.create(self)
+    end
+    
+    def update(service)
+      service.update(self)
     end
 
     

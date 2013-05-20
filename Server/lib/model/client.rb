@@ -9,20 +9,20 @@ module Model
     attr_accessor :segment_id, :name, :location, :profile_data
     attr_reader :geohash, :hashed_passkey
 
-    @@service = Service::Segment.new
+    @@service = Service::Client.new
     @@properties = Base.create_properties([:@segment_id, :@hashed_passkey, :@name, :@geohash, :@location, :@profile_data])
     @@attribute_map = Base.create_attribute_map(@@properties)
 
-    def initialize(segment_id, name, location = nil, profile_data = nil)
+    def initialize(segment_id = nil, name = nil, location = nil, profile_data = nil)
       @segment_id = segment_id
       @name = name
       @location = location
       @profile_data = profile_data
     end
 
-    # Retrieve Segment record from data store
-    def self.retrieve(segment_id)
-      @@service.retrieve(segment_id)
+    # Retrieve Client record from data store
+    def self.retrieve(client_id)
+      @@service.retrieve(client_id)
     end
 
     def attribute_map
@@ -38,7 +38,7 @@ module Model
     # If success, returns generated passkey and instance properties updated
     # @note Only hashed passkey is stored
     def create
-      segment = Model::Segment.retrieve_segment(@segment_id)
+      segment = Model::Segment.retrieve(@segment_id)
 
       if segment == nil
         #uh-oh not good
@@ -49,7 +49,7 @@ module Model
 
       #for now assume we don't need to validate user/pass, go ahead and create passkey
       passkey = SecureRandom.base64(30)
-      hashed_passkey = self.hash_passkey(passkey)
+      @hashed_passkey = Model::Client.digest_passkey(passkey)
 
       #store into database
       super(@@service)      
@@ -66,15 +66,15 @@ module Model
     #
     # @returns [Boolean] true if matched, false otherwise
     def self.validate_passkey(client_id, passkey)
-      client = Model::Client.retrieve(client_id)
-      return (client.hashed_passkey() == self.hash_passkey(passkey))
+      client = Model::Client.retrieve(client_id)      
+      return (client.hashed_passkey == Model::Client.digest_passkey(passkey))
     end
 
-    private
-    def self.hash_passkey(passkey)
+    def self.digest_passkey(passkey)
       obj = Digest::SHA2.new << passkey
       obj.to_s
     end
+    
 
   end
 end

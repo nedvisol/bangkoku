@@ -1,5 +1,5 @@
 module Service
-  class Client
+  class Client < Service::Base
     TABLE_NAME = 'entity'
     MODEL_TYPE = 'C'
     def initialize
@@ -20,11 +20,8 @@ module Service
       super(client_id, 'Model::Client')
     end    
     
-    def update(client_id, attributes)
-      @data_access.update_row(TABLE_NAME, client_id, attributes)
-
-      # invalidate cache
-      $cache[:entity].delete(client_id, nil)
+    def update(client)
+      super(client)
     end
     
 

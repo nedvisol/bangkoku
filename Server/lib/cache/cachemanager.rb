@@ -24,6 +24,10 @@ module Cache
       @backend.set(key, serialize(value))
     end
     
+    def delete(key)
+      @backend.delete(key)
+    end
+    
     private 
     def serialize(obj)    
       Marshal.dump(obj)      
