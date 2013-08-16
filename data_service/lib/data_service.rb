@@ -1,5 +1,5 @@
 require 'rubygems'
-require "interfaces/cassandra"
+
 
 class DataService
   VERSION = "0.0.1"
